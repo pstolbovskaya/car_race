@@ -15,13 +15,9 @@ export class WinnersServer implements Subject {
             }),
         })
         console.log(response.json());
-
-        /*this.state.selectedCar = undefined;
-        this.getCars();*/
     }
         
     public async updateWinner(id: number, wins: number, time: number) {
-        //const id = this.state.selectedCar;
 
         if (id !== undefined) {
             
@@ -34,41 +30,26 @@ export class WinnersServer implements Subject {
                     wins: wins, time: time,
                 }),
             })
-            
-            /*this.state.selectedCar = undefined;
-            this.getCars();*/
         }
             
     }
 
     public async getWinner(id: number) {
-        /*const page = this.state.page;
-        const limit = this.state.limit;*/
-
         const response = await fetch(`http://localhost:3000/winners/${id}`, {
             method: 'GET',
             headers: {
                 'content-type': 'application/json;charset=UTF-8',
             },
         });
-/*
-        this.state.cars = await response.json() as Array<any>;
-        this.notify();*/
     }
 
     public async getWinners(page: number, limit: number, sort: 'id'|'wins'|'time', order: 'ASC'|'DESC') {
-       /* const page = this.state.page;
-        const limit = this.state.limit;*/
-        
         const response = await fetch(`http://localhost:3000/winners?_page=${page}&_limit=${limit}&_sort=${sort}&_order=${order}`, {
             method: 'GET',
             headers: {
                 'content-type': 'application/json;charset=UTF-8',
             },
         });
-
-        /*this.state.cars = await response.json() as Array<any>;
-        this.notify();*/
     }
 
     public async deleteWinner(id: number) {
@@ -76,9 +57,6 @@ export class WinnersServer implements Subject {
             method: 'DELETE',
         })
         console.log(response.json());
-
-/*        this.state.selectedCar = undefined;
-        this.getCars();*/
     }
         
     public attach(observer: Observer): void {

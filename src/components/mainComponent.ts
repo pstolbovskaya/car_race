@@ -7,8 +7,8 @@ import { BaseComponent } from "./baseComponent";
 export class MainComponent extends BaseComponent{
 
     dataBlock = new DataManipulation({tag: "div"});
-    garage = new Garage({tag: "div"});
-    winners = new Winners({tag: "table"});
+    garage = new Garage({tag: "div", id: "garage"});
+    winners = new Winners({tag: "table", id: "winners"});
     
     constructor() {
         super({tag: 'main'});

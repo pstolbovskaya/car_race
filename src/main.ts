@@ -1,17 +1,23 @@
-//import './style.scss'
-//import typescriptLogo from './typescript.svg'
-//import viteLogo from '/vite.svg'
-
 import { FooterComponent } from "./components/footerComponent";
 import { HeaderComponent } from "./components/headerComponent";
 import { MainComponent } from "./components/mainComponent"
 
-//import { setupCounter } from './counter.ts'
-const main: MainComponent = new MainComponent();
-const header: HeaderComponent = new HeaderComponent();
-const footer: FooterComponent = new FooterComponent();
+export class Main {
+    
+    static build() {
+        
+        [...document.body.children].forEach(element => {
+            document.body.removeChild(element); 
+        });
 
-document.body.append(header.getNode());
-document.body.append(main.getNode());
-document.body.append(footer.getNode());
-//document.body.append()
+        const header: HeaderComponent = new HeaderComponent();
+        const main: MainComponent = new MainComponent();
+        const footer: FooterComponent = new FooterComponent();
+
+        document.body.append(header.getNode());
+        document.body.append(main.getNode());
+        document.body.append(footer.getNode());
+    }
+}
+
+Main.build();

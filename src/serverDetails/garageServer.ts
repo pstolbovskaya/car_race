@@ -4,9 +4,10 @@ import { Observer } from "./observer";
 export class GarageServer implements Subject {
 	
 	private observers: Observer[] = [];
+
 	public state : State = {
 		cars: [],
-		selectedCar: undefined,
+		selectedCar: null,
 		page: 1,
 		limit: 7,
 		designPage: "Garage",
@@ -24,7 +25,7 @@ export class GarageServer implements Subject {
 		})
 		console.log(response.json());
 
-		this.state.selectedCar = undefined;
+		this.state.selectedCar = null;
 		this.getCars();
 	}
 		
@@ -43,10 +44,26 @@ export class GarageServer implements Subject {
 				}),
 			})
 			
-			this.state.selectedCar = undefined;
+			this.state.selectedCar = null;
 			this.getCars();
 		}
 			
+	}
+
+	public async getCar() {
+		const id = this.state.selectedCar?.id;
+
+		if (id) {
+
+			const response = await fetch(`http://localhost:3000/garage/${id}`, {
+				method: 'GET',
+			});
+			
+			//this.state.selectedCar = await response.json() as CarType;
+		}
+
+		this.notify();
+		//this.getCars();
 	}
 
 	public async getCars() {
@@ -60,13 +77,24 @@ export class GarageServer implements Subject {
 			},
 		});
 
-		this.state.cars = await response.json() as Array<any>;
+		this.state.cars = await response.json() as Array<CarType>;
+		//this.state.selectedCar = this.nullCar;
 		this.notify();
 	}
 
-	public async deleteCar(page?: number, ) {
+	public async deleteCar() {
+		const id = this.state.selectedCar?.id;
 
+		if (id) {
+			const response = await fetch(`http://localhost:3000/garage/${id}`, {
+				method: 'DELETE',
+			});
+		
+			this.state.selectedCar = null;
+			this.getCars();
+		}
 	}
+	
 
 	public attach(observer: Observer): void {
 		if (!this.observers.includes(observer)) {
@@ -89,15 +117,15 @@ export class GarageServer implements Subject {
 
 }
 
-type Car = {
+export type CarType = {
 	id: number, 
 	color: string, 
 	name: string,
 }
 
 interface State {
-	cars: Array<Car>,
-	selectedCar: number|undefined,
+	cars: Array<CarType>,
+	selectedCar: CarType | null,
 	page: number,
 	limit: number,
 	designPage: string,

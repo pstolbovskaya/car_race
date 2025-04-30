@@ -1,6 +1,6 @@
 import { BaseComponent } from "../components/baseComponent";
 import { baseOptions } from "../components/baseOptions";
-import { Car } from "../components/car";
+import { Car } from "./car";
 import { Observer, Subject } from "../serverDetails/observer";
 import { GarageServer } from "../serverDetails/garageServer";
 import { ServerListener } from "../serverDetails/serverListener";
@@ -29,9 +29,7 @@ export class Garage extends BaseComponent implements Observer {
         this.destroyChildren();
 
         this.server.state.cars.forEach(element => {
-            const car = new Car({tag: "div"}, element.id);
-            car.setTitle(element.name);
-            car.setColor(element.color);
+            const car = new Car({tag: "div"}, element);
             car.build();
             
             this.append(car); 
