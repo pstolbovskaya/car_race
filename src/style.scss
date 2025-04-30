@@ -1,0 +1,15 @@
+.road {
+    border-bottom: 2px dashed #000000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.flag {
+    transform: scale(3) translate(-20px, 9px);
+}
+
+footer {
+    justify-self: center;
+    position: sticky;
+}
