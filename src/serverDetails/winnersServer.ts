@@ -5,7 +5,7 @@ export class WinnersServer implements Subject {
     private observers : Array<Observer> = [];
 
     public async createWinner(id: number, wins: number, time: number) {
-        const response = await fetch('http://localhost:3000//winners/', {
+        const response = await fetch('http://localhost:3000/winners/', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json;charset=UTF-8',

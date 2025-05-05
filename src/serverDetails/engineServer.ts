@@ -26,6 +26,24 @@ export class EngineServer implements Subject {
                 'content-type': 'application/json;charset=UTF-8',
             },
         })
+
+        this.notify();
+    }
+
+    
+    public async driveEngine() {
+        const params = new URLSearchParams();
+        params.append("id", this.engineState.id.toString());
+        params.append("status",  "drive");
+
+        const response = await fetch(`http://localhost:3000/engine?${params}`, {        
+            method: 'PATCH',
+            headers: {
+                'content-type': 'application/json;charset=UTF-8',
+            },
+        })
+
+        this.notify();
     }
 
 	public attach(observer: Observer): void {
@@ -37,7 +55,7 @@ export class EngineServer implements Subject {
 	public detach(observer: Observer): void {
         const observerIndex = this.observers.indexOf(observer);
         if (observerIndex !== -1) {
-    		this.observers.splice(observerIndex, 1);
+            this.observers.splice(observerIndex, 1);
         }
     }
 

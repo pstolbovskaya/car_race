@@ -30,9 +30,9 @@ export class GarageServer implements Subject {
 	}
 		
 	public async updateCar(name: string, color: string) {
-		const id = this.state.selectedCar;
+		const id = this.state.selectedCar?.id;
 
-		if (id !== undefined) {
+		if (id) {
 			
 			const response = await fetch(`http://localhost:3000/garage/${id}`, {
 				method: 'PUT',

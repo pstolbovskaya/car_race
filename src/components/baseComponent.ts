@@ -11,7 +11,7 @@ export class BaseComponent {
         this.node = node;
     
         if (children) {
-          this.appendChildren(children);
+            this.appendChildren(children);
         }
     }
 
