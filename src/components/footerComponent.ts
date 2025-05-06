@@ -30,12 +30,9 @@ export class FooterComponent extends BaseComponent implements Observer {
         //console.log((ServerListener.server.state.page <= 1).toString());
         const totalPages = Math.ceil(ServerListener.garage.state.cars.length / ServerListener.garage.state.limit);
 
-        console.log(this.nextPageBtn.getNode().attributes);
-        
         this.prevPageBtn.removeAttribute("disabled");
         this.nextPageBtn.removeAttribute("disabled");
 
-        console.log(this.nextPageBtn.getNode().attributes);
 
         if (ServerListener.garage.state.page <= 1) {
             this.prevPageBtn.setAttribute("disabled", "");
@@ -43,8 +40,6 @@ export class FooterComponent extends BaseComponent implements Observer {
         if (ServerListener.garage.state.cars.length < ServerListener.garage.state.limit) {
             this.nextPageBtn.setAttribute("disabled", "");
         }
-
-        console.log(this.nextPageBtn.getNode().attributes);
 
         this.curPage.setTextContent(ServerListener.garage.state.page.toString());
         this.appendChildren([this.prevPageBtn, this.curPage, this.nextPageBtn]);

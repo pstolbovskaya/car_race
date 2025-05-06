@@ -6,8 +6,9 @@ import { Button } from "../components/buttonComponent";
 import { carSvg } from "../media/carSvg";
 import { flagSvg } from "../media/flagSvg";
 import { EngineState } from "../serverDetails/engineServer";
+import { Observer, Subject } from "../serverDetails/observer";
 
-export class Car extends BaseComponent{
+export class Car extends BaseComponent implements Observer{
     private road: BaseComponent  = new BaseComponent({tag: 'div'}); 
     private title: BaseComponent  = new BaseComponent({tag: 'p'}); 
     private svg: BaseComponent  = new BaseComponent({tag: 'div'}); 
@@ -45,15 +46,24 @@ export class Car extends BaseComponent{
             ServerListener.engine.switchEngine(); 
         })
 
+        ServerListener.engine.attach(this);
         this.init();
 
         //this.build();
     }
 
     init() {
+        
+        this.engineStopBtn.setAttribute("disabled", '');
+        this.engineStartBtn.removeAttribute("disabled");
+
         //this.title.setTextContent(this.carTitle);
         this.finish.setHTML(flagSvg());
         this.finish.toggleClass("flag");
+    }
+
+    update(subject: Subject): void {
+        this.listenEngine();
     }
 
     build() {
@@ -75,5 +85,44 @@ export class Car extends BaseComponent{
             this.deleteBtn.setAttribute("disabled", '');
             this.selectBtn.removeAttribute("disabled");
         }
+    }
+
+    listenEngine() {
+        if (ServerListener.engine.engineState?.id === this.car.id) {
+            this.drive() 
+        }
+    }
+
+    drive() {
+        const stepSize  = ServerListener.engine.engineState.velocity?? 0;
+        const car       = this.svg.getNode();
+        let road        = (ServerListener.engine.engineState.distance?? 0) * 0.002;
+        
+        if (ServerListener.engine.engineState.status === "stopped") {
+            road = road * Math.random();
+        }
+        console.log(road);
+        
+        let start:number;
+
+        function step(timestamp:number) {
+            if (start === undefined) {
+              start = timestamp;
+            }
+            const elapsed = timestamp - start;
+            // Math.min() is used here to make sure the element stops at exactly 200px
+            const shift = Math.min(0.01 * stepSize * elapsed, +road);
+            
+            car.style.transform = `translateX(${shift}px)`;
+
+            if (shift < +road) {
+              requestAnimationFrame(step);
+            }
+        }
+
+        requestAnimationFrame(step);
+        
+        this.engineStopBtn.setAttribute("disabled", '');
+        this.engineStartBtn.removeAttribute("disabled");
     }
 }

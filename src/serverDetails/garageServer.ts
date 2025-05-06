@@ -23,7 +23,6 @@ export class GarageServer implements Subject {
 				name: name.toLowerCase(), color: color.toLowerCase() ,
 			}),
 		})
-		console.log(response.json());
 
 		this.state.selectedCar = null;
 		this.getCars();
@@ -78,7 +77,6 @@ export class GarageServer implements Subject {
 		});
 
 		this.state.cars = await response.json() as Array<CarType>;
-		//this.state.selectedCar = this.nullCar;
 		this.notify();
 	}
 
@@ -115,6 +113,18 @@ export class GarageServer implements Subject {
         }
     }
 
+	public generateCars() {
+		const cars = ['Mersedes', 'Audi', 'BMW', 'KIA', 'Hyundai', 'Peugeot', 'Renault', 'Citroen', 'Volkswagen', 'Porsche', 'Ferrari',
+			'BYD', 'Tesla', 'Opel', 'Dodge', 'Chevrolet', 'JMC', 'Land rover', 'Range rover', 'Lada', 'Mitsubishi', 'Toyota', 'Mazda',
+			'Dongfeng', 'JAC', 'Moskvich', 'Zhiguli', 'Geely', 'Volga', 'Honda', 'Ford'
+		];
+		for (let i=0; i<100; i++) {
+			const color = "#" + Math.floor(Math.random()*16777215).toString(16);
+			const name = cars[Math.floor(Math.random() * cars.length)];
+
+			this.createCar(name, color);
+		}
+	}
 }
 
 export type CarType = {
