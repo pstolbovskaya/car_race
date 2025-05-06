@@ -43,7 +43,7 @@ export class WinnersServer implements Subject {
         });
     }
 
-    public async getWinners(page: number, limit: number, sort: 'id'|'wins'|'time', order: 'ASC'|'DESC') {
+    public async getWinners(page?: number, limit?: number, sort?: 'id'|'wins'|'time', order?: 'ASC'|'DESC') {
         const response = await fetch(`http://localhost:3000/winners?_page=${page}&_limit=${limit}&_sort=${sort}&_order=${order}`, {
             method: 'GET',
             headers: {
