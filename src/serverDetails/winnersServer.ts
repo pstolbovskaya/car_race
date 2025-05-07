@@ -1,9 +1,28 @@
 import { Subject } from "./observer";
 import { Observer } from "./observer";
 
+export type WinnerType = {
+	id: number,  
+    winCount: number,
+    time: number,
+}
+
+
+interface State {
+    winners: Array<WinnerType>,
+    page: number,
+    limit: number,
+}
+
 export class WinnersServer implements Subject {
     private observers : Array<Observer> = [];
 
+    public winPage : State = {
+        winners: [],
+        page: 1,
+        limit: 10,
+    }
+    
     public async createWinner(id: number, wins: number, time: number) {
         const response = await fetch('http://localhost:3000/winners/', {
             method: 'POST',
@@ -11,7 +30,7 @@ export class WinnersServer implements Subject {
                 'content-type': 'application/json;charset=UTF-8',
             },
             body: JSON.stringify({
-                id: id, wins: wins, time: time ,
+                id: id, wins: wins, time: time,
             }),
         })
         console.log(response.json());
@@ -31,7 +50,6 @@ export class WinnersServer implements Subject {
                 }),
             })
         }
-            
     }
 
     public async getWinner(id: number) {
@@ -43,13 +61,17 @@ export class WinnersServer implements Subject {
         });
     }
 
-    public async getWinners(page: number, limit: number, sort: 'id'|'wins'|'time', order: 'ASC'|'DESC') {
+    public async getWinners(page?: number, limit?: number, sort?: 'id'|'wins'|'time', order?: 'ASC'|'DESC') {
         const response = await fetch(`http://localhost:3000/winners?_page=${page}&_limit=${limit}&_sort=${sort}&_order=${order}`, {
             method: 'GET',
             headers: {
                 'content-type': 'application/json;charset=UTF-8',
             },
         });
+
+        this.winPage.winners = await response.json() as Array<WinnerType>;
+        console.log(this.winPage.winners);
+        this.notify();
     }
 
     public async deleteWinner(id: number) {

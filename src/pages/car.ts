@@ -5,7 +5,6 @@ import { baseOptions } from "../components/baseOptions";
 import { Button } from "../components/buttonComponent";
 import { carSvg } from "../media/carSvg";
 import { flagSvg } from "../media/flagSvg";
-import { EngineState } from "../serverDetails/engineServer";
 import { Observer, Subject } from "../serverDetails/observer";
 
 export class Car extends BaseComponent implements Observer{
@@ -31,38 +30,38 @@ export class Car extends BaseComponent implements Observer{
             ServerListener.garage.deleteCar());
 
         this.engineStartBtn = new Button("A", () => {
-            ServerListener.engine.engineState = {
-                id: car.id,
-                status: 'started',
-            };
-            ServerListener.engine.switchEngine();            
+            //ServerListener.engine.engineState.set(this.car.id, {"started"})
+            ServerListener.engine.switchEngine(this.car.id, "started");            
         })
 
         this.engineStopBtn = new Button("B", () => {
-            ServerListener.engine.engineState = {
+            /*ServerListener.engine.engineState = {
                 id: car.id,
                 status: 'stopped',
-            };
-            ServerListener.engine.switchEngine(); 
+            };*/
+            ServerListener.engine.switchEngine(this.car.id, "stopped"); 
         })
-    
+
+        ServerListener.engine.attach(this);
         this.init();
 
         //this.build();
     }
 
     init() {
+        
+        this.engineStopBtn.setAttribute("disabled", '');
+        this.engineStartBtn.removeAttribute("disabled");
+
         //this.title.setTextContent(this.carTitle);
         this.finish.setHTML(flagSvg());
         this.finish.toggleClass("flag");
-
-        ServerListener.engine.attach(this);
     }
 
     update(subject: Subject): void {
-        this.engine();
-
+        this.listenEngine();
     }
+
     build() {
         this.road.appendChildren([this.svg, this.finish]);
         this.road.toggleClass("road")
@@ -71,7 +70,6 @@ export class Car extends BaseComponent implements Observer{
         const  engine = new BaseComponent({tag: "div"});
         selection.appendChildren([this.selectBtn, this.deleteBtn]);
         engine.appendChildren([this.engineStartBtn, this.engineStopBtn]);
-
         this.svg.setHTML(carSvg(this.car.color));
         this.appendChildren([this.title, selection, engine, this.road]);
 
@@ -84,52 +82,41 @@ export class Car extends BaseComponent implements Observer{
         }
     }
 
-    engine() {
-        if (ServerListener.engine.engineState.id === this.car.id) {
-
-            switch (ServerListener.engine.engineState.status) {
-                case "started" :
-                    this.engineStartBtn.setAttribute("disabled", '');
-                    this.engineStopBtn.removeAttribute("disabled");
-                    break;
-                case "stopped":
-                    this.engineStopBtn.setAttribute("disabled", '');
-                    this.engineStartBtn.removeAttribute("disabled");
-                    break;
-                case "drive":
-                    this.drive();
-                    break;
-                default: 
-                break;
-                }
+    listenEngine() {
+        if(ServerListener.engine.engineState.get(this.car.id)?.status === "started"){
+            this.drive();
         }
     }
 
     drive() {
-    let start: number;
-    const car = this.car.id === ServerListener.engine.engineState.id? this.svg.getNode() : undefined;
-    const stepLength = Math.random();
+        const stepSize  = (ServerListener.engine.engineState.get(this.car.id)?.velocity?? 0) * 0.1;
+        const car       = this.svg.getNode();
+        let road        = (ServerListener.engine.engineState.get(this.car.id)?.distance?? 0) * 0.002;
+        const carId     = this.car.id;
+        
+        ServerListener.engine.engineState.set(this.car.id, {status: "drive", velocity: stepSize, distance: road*500});
 
-        function step(timestamp: number) {
+        let start:number;
+
+        function step(timestamp:number) {
             if (start === undefined) {
-                start = timestamp;
+              start = timestamp;
             }
             const elapsed = timestamp - start;
-
-            if (car) {
-                // Math.min() is used here to make sure the element stops at exactly 200px
-                const shift = Math.min(elapsed * stepLength, window.innerWidth);
-                
-                car.style.transform = `translateX(${shift}px)`;
-                
-                if (shift < window.innerWidth
-                && ServerListener.engine.engineState.status === "drive") {
-                    requestAnimationFrame(step);
-                }
-            }
+            // Math.min() is used here to make sure the element stops at exactly 200px
+            const shift = Math.min(0.01 * stepSize * elapsed, +road);
             
+            car.style.transform = `translateX(${shift}px)`;
+
+            if (shift < +road && ServerListener.engine.engineState.get(carId)?.status !== "stopped") {
+                //ServerListener.engine.drive(carId.toString());
+                requestAnimationFrame(step);
+            }
         }
-    
+
         requestAnimationFrame(step);
+        
+        this.engineStopBtn.setAttribute("disabled", '');
+        this.engineStartBtn.removeAttribute("disabled");
     }
 }

@@ -27,7 +27,6 @@ export class Garage extends BaseComponent implements Observer {
 
     run() {
         this.destroyChildren();
-
         this.server.state.cars.forEach(element => {
             const car = new Car({tag: "div"}, element);
             car.build();
