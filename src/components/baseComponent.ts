@@ -2,7 +2,7 @@ import { baseOptions } from "./baseOptions";
 
 export class BaseComponent {
     protected children: Array<BaseComponent> = [];
-    protected node: HTMLElement;
+    protected node: HTMLElement | undefined;
 
     constructor(component: baseOptions, ...children : Array<BaseComponent>) {
         const node = document.createElement(component.tag);
@@ -18,7 +18,7 @@ export class BaseComponent {
 
     append(child: BaseComponent) {
         this.children.push(child);
-        this.node.append(child.getNode())
+        this.node!.append(child.getNode())
     }
 
     appendChildren(children: Array<BaseComponent>) {
@@ -26,7 +26,7 @@ export class BaseComponent {
     }
 
     getNode() : HTMLElement {
-        return this.node;
+        return this.node as HTMLElement;
     }
 
     getChildren() : Array<BaseComponent> {
@@ -34,31 +34,31 @@ export class BaseComponent {
     }
 
     setTextContent(textContent: string) {
-        this.node.textContent = textContent;
+        this.node!.textContent = textContent;
     }
     
     setAttribute(attribute: string, value: string) {
-        this.node.setAttribute(attribute, value);
+        this.node?.setAttribute(attribute, value);
     }
 
     removeAttribute(attribute: string) {
-        this.node.removeAttribute(attribute);
+        this.node?.removeAttribute(attribute);
     }
 
     toggleClass(className: string) {
-        this.node.classList.toggle(className);
+        this.node?.classList.toggle(className);
     }
 
     addEventListener(event: string, listener: () => any, options:boolean|AddEventListenerOptions) {
-        this.node.addEventListener(event, listener, options);
+        this.node?.addEventListener(event, listener, options);
     }
 
     setHTML(html: string) {
-        this.node.innerHTML = html;
+        this.node!.innerHTML = html;
     }
     
     removeEventListener(event: string, listener: () => any, options:boolean|AddEventListenerOptions) {
-        this.node.removeEventListener(event, listener, options);
+        this.node!.removeEventListener(event, listener, options);
     }
 
     destroyChildren() {
@@ -68,6 +68,7 @@ export class BaseComponent {
     
     destroy() {
         this.destroyChildren();
-        this.node.remove();
+        this.node!.remove();
+        this.node = undefined;
     }
 }

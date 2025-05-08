@@ -75,7 +75,6 @@ export class EngineServer implements Subject {
             this.engineState.set(idParam, {status: "stopped", velocity: 1, distance: this.engineState.get(idParam)?.distance});            
         }
 
-        console.log(this.engineState.get(idParam))
         const velocity = response.status === 500 ? 1 : this.engineState.get(idParam)?.velocity?? 1;
         const distance = this.engineState.get(idParam)?.distance || Math.max();
 
@@ -84,7 +83,6 @@ export class EngineServer implements Subject {
             time: distance/velocity,
         }
 
-        console.log(distance, velocity)
 
         return resultObj;
     }
@@ -124,7 +122,6 @@ export class EngineServer implements Subject {
                         },
                     })
                     */
-                   console.log(fetchStart)
                     return fetchStart;
                 });    
                 

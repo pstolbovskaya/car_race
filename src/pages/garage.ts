@@ -29,7 +29,7 @@ export class Garage extends BaseComponent implements Observer {
         this.destroyChildren();
         this.server.state.cars.forEach(element => {
             const car = new Car({tag: "div"}, element);
-            car.build();
+            //car.build();
             
             this.append(car); 
         });

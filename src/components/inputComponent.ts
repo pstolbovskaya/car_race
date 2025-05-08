@@ -17,7 +17,6 @@ export class Input extends BaseComponent {
     }
 
     getValue(): string {
-        console.log('asdsd')
         return (this.getNode() as HTMLInputElement).value;
     }
 

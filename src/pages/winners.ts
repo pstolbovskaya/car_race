@@ -28,7 +28,6 @@ export class Winners extends BaseComponent implements Observer{
         this.destroyChildren();
 
         ServerListener.winners.winPage.winners.forEach(element => {
-            console.log(element);
             
             const winner = new Winner({tag: "div"}, element);
             winner.build();

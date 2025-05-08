@@ -3,7 +3,7 @@ import { Observer } from "./observer";
 
 export type WinnerType = {
 	id: number,  
-    winCount: number,
+    wins: number,
     time: number,
 }
 
@@ -33,7 +33,6 @@ export class WinnersServer implements Subject {
                 id: id, wins: wins, time: time,
             }),
         })
-        console.log(response.json());
     }
         
     public async updateWinner(id: number, wins: number, time: number) {
@@ -70,7 +69,6 @@ export class WinnersServer implements Subject {
         });
 
         this.winPage.winners = await response.json() as Array<WinnerType>;
-        console.log(this.winPage.winners);
         this.notify();
     }
 
@@ -78,7 +76,6 @@ export class WinnersServer implements Subject {
         const response = await fetch(`http://localhost:3000//winners/${id}`, {
             method: 'DELETE',
         })
-        console.log(response.json());
     }
         
     public attach(observer: Observer): void {

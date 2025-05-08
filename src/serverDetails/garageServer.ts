@@ -68,7 +68,6 @@ export class GarageServer implements Subject {
 	public async getCars() {
 		const page = this.state.page;
 		const limit = this.state.limit;
-
 		const response = await fetch(`http://localhost:3000/garage?_page=${page}&_limit=${limit}`, {
 			method: 'GET',
 			headers: {

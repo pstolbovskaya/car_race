@@ -22,8 +22,8 @@ export class Winner extends BaseComponent implements Observer {
 
     init() {
         this.title.setTextContent(this.winner.id.toString());
-        this.numberOfWins.setTextContent(this.winner.winCount.toString());
-        this.time.setTextContent(this.winner.winCount.toString());
+        this.numberOfWins.setTextContent(this.winner.wins.toString());
+        this.time.setTextContent(this.winner.time.toString());
     }
 
     build() {
