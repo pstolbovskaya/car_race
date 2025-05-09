@@ -64,6 +64,7 @@ export class Car extends BaseComponent implements Observer {
     }
 
     build() {
+        console.log("Building...");
         this.road = new BaseComponent({tag: 'div'});
         this.title = new BaseComponent({tag: 'p'});
         this.svg = new BaseComponent({tag: 'div'});

@@ -17,7 +17,7 @@ export class DataManipulation extends BaseComponent {
         const createContainer = new DataContainer(options, "create", (name: string, color: string) => this.server.createCar(name, color));
         const updateContainer = new DataContainer(options, "update", (name: string, color: string) => this.server.updateCar(name, color)); //update car clbck
         const race  = new Button("race", () => ServerListener.engine.startRace());
-        const reset = new Button("reset", () => null);
+        const reset = new Button("reset", () => this.server.getCars());
         const generateCars = new Button("generate cars", () => this.server.generateCars());
         
         this.appendChildren([createContainer, updateContainer]);
