@@ -7,11 +7,13 @@ export class HeaderComponent extends BaseComponent{
 
     toWinners   = new Button("To Winners", () => {
         ServerListener.garage.state.designPage = "Winners";
-        Main.build();
+        ServerListener.garage.detachAll();
+        new Main();
     });
     toGarage    = new Button("To Garage", () => {
         ServerListener.garage.state.designPage = "Garage";
-        Main.build();
+        ServerListener.garage.detachAll();
+        new Main();
     });
 
     linkToGarage = new BaseComponent({tag: "a"});

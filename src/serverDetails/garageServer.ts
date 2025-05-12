@@ -1,5 +1,6 @@
-import { Subject } from "./observer";
-import { Observer } from "./observer";
+import { Subject } from "../components/dataTypes/observer.ts";
+import { Observer } from "../components/dataTypes/observer.ts";
+import {Car} from "../pages/pageElements/car.ts";
 
 export class GarageServer implements Subject {
 	
@@ -106,6 +107,14 @@ export class GarageServer implements Subject {
         }
     }
 
+	public getObservers() {
+		return this.observers;
+	}
+
+	public detachAll(): void {
+		this.observers.splice(0, this.observers.length);
+	}
+
 	public notify(): void {
         for (const observer of this.observers) {
             observer.update(this);
@@ -128,8 +137,8 @@ export class GarageServer implements Subject {
 
 export type CarType = {
 	id: number, 
-	color: string, 
 	name: string,
+	color: string,
 }
 
 interface State {

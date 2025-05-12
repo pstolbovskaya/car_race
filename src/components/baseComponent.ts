@@ -1,4 +1,4 @@
-import { baseOptions } from "./baseOptions";
+import { baseOptions } from "./dataTypes/baseOptions.ts";
 
 export class BaseComponent {
     protected children: Array<BaseComponent> = [];
@@ -26,6 +26,7 @@ export class BaseComponent {
     }
 
     getNode() : HTMLElement {
+
         return this.node as HTMLElement;
     }
 

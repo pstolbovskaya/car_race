@@ -1,7 +1,7 @@
 import { BaseComponent } from "./baseComponent";
 import { Button } from "./buttonComponent";
 import { Input } from "./inputComponent";
-import { baseOptions } from "../components/baseOptions";
+import { baseOptions } from "./dataTypes/baseOptions.ts";
 
 export class DataContainer extends BaseComponent {
     private input: Input;

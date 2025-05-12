@@ -1,10 +1,10 @@
-import { Subject } from "./observer";
-import { Observer } from "./observer";
+import { Subject } from "../components/dataTypes/observer.ts";
+import { Observer } from "../components/dataTypes/observer.ts";
 
 export type WinnerType = {
 	id: number,  
     wins: number,
-    time: number,
+    time: string,
 }
 
 
@@ -23,7 +23,8 @@ export class WinnersServer implements Subject {
         limit: 10,
     }
     
-    public async createWinner(id: number, wins: number, time: number) {
+    public async createWinner(wins: number, time: string) {
+        const id = this.winPage.winners.length +1;
         const response = await fetch('http://localhost:3000/winners/', {
             method: 'POST',
             headers: {
@@ -58,6 +59,10 @@ export class WinnersServer implements Subject {
                 'content-type': 'application/json;charset=UTF-8',
             },
         });
+    }
+
+    public getObservers() {
+        return this.observers;
     }
 
     public async getWinners(page?: number, limit?: number, sort?: 'id'|'wins'|'time', order?: 'ASC'|'DESC') {
@@ -95,5 +100,9 @@ export class WinnersServer implements Subject {
         for (const observer of this.observers) {
             observer.update(this);
         }
+    }
+
+    public detachAll(): void {
+        this.observers.splice(0, this.observers.length);
     }
 }

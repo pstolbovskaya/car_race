@@ -1,22 +1,26 @@
-import { DataManipulation } from "../pages/dataManipulation";
 import { Garage } from "../pages/garage";
-import { Winners } from "../pages/winners";
+import { Winners } from "../pages/winners.ts";
 import { ServerListener } from "../serverDetails/serverListener";
 import { BaseComponent } from "./baseComponent";
 
 export class MainComponent extends BaseComponent{
 
-    dataBlock = new DataManipulation({tag: "div"});
+    //dataBlock = new DataManipulation({tag: "div"});
     
     constructor() {
         super({tag: 'main'});
-        let blockAppend: BaseComponent;
+        let blockAppend: BaseComponent | null = null;
+
+        ServerListener.garage.detachAll();
+        ServerListener.winners.detachAll();
 
         switch (ServerListener.garage.state.designPage) {
             case "Winners":
+                ServerListener.winners.detachAll();
                 blockAppend = new Winners({tag: "table"});  
                 break;
             case "Garage":
+                ServerListener.garage.detachAll();
                 blockAppend = new Garage({tag: "div"});
                 break;
             default:
@@ -24,7 +28,9 @@ export class MainComponent extends BaseComponent{
                 break;
         }
 
-        this.append(this.dataBlock);
+        //this.append(this.dataBlock);
         this.append(blockAppend);
+
+        //console.log(this)
     }
 }

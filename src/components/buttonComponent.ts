@@ -1,5 +1,5 @@
 import { BaseComponent } from "./baseComponent";
-import { baseOptions } from "./baseOptions";
+import { baseOptions } from "./dataTypes/baseOptions.ts";
 
 export class Button extends BaseComponent {
     constructor(text: string, clbck: (this: GlobalEventHandlers, ev: MouseEvent) => any, className?: string) {

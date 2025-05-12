@@ -1,5 +1,5 @@
 //header.append
-import { Observer, Subject } from "../serverDetails/observer";
+import { Observer, Subject } from "./dataTypes/observer.ts";
 import { ServerListener } from "../serverDetails/serverListener";
 import { BaseComponent } from "./baseComponent";
 import { Button } from "./buttonComponent";
