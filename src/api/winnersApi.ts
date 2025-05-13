@@ -1,3 +1,4 @@
+
 export const createWinner = async (id: number, wins: number, time: string) =>
     await fetch('http://localhost:3000/winners/', {
         method: 'POST',
@@ -9,7 +10,7 @@ export const createWinner = async (id: number, wins: number, time: string) =>
         }),
     });
 
-export const updateWinner = async (id: number, wins: number, time: number) => {
+export const updateWinner = async (id: number, wins: number, time: string) => {
     const params = new URLSearchParams();
     params.append("id", id.toString());
     return await fetch(`http://localhost:3000/winners/${id}`, {
@@ -23,12 +24,11 @@ export const updateWinner = async (id: number, wins: number, time: number) => {
     })
 }
 
-
-export const getWinner = async (id: number) => {
+export const getWinner = async (id: number): Promise<WinnerType> => {
     const params = new URLSearchParams();
-    params.append("id", id.toString());
+    params.append("id", `${id}`);
 
-    const response = await fetch(`http://localhost:3000/winners/${params}`, {
+    const response = await fetch(`http://localhost:3000/winners/${id}`, {
         method: 'GET',
         headers: {
             'content-type': 'application/json;charset=UTF-8',
@@ -37,24 +37,31 @@ export const getWinner = async (id: number) => {
     return response.json();
 }
 
-export const getWinners = async (page: number, limit: number, sort: 'id' | 'wins' | 'time', order: 'ASC' | 'DESC') => {
+export type WinnerType = {
+    id: number,
+    wins: number,
+    time: number,
+}
+
+export const getWinners = async (page: number, limit: number, sort: 'id' | 'wins' | 'time' = 'id', order: 'ASC' | 'DESC' = 'ASC') => {
     const params = new URLSearchParams();
     params.append("_page", page.toString());
     params.append("_limit", limit.toString());
     params.append("_sort", sort.toString());
     params.append("_order", order.toString());
-    return await fetch(`http://localhost:3000/winners?_page=${page}&_limit=${limit}&_sort=${sort}&_order=${order}`, {
+    const result = await fetch(`http://localhost:3000/winners?_page=${page}&_limit=${limit}&_sort=${sort}&_order=${order}`, {
         method: 'GET',
         headers: {
             'content-type': 'application/json;charset=UTF-8',
         },
     });
+    return await result.json() as Array<WinnerType>;
 }
 
 export const deleteWinner = async (id: number) => {
     const params = new URLSearchParams();
     params.append("id", id.toString());
-    return await fetch(`http://localhost:3000//winners/${params}`, {
+    return await fetch(`http://localhost:3000//winners/${id}`, {
         method: 'DELETE',
     })
 }

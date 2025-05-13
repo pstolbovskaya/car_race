@@ -1,12 +1,12 @@
-import {CarType} from "../../serverDetails/garageServer.ts";
-import {ServerListener} from "../../serverDetails/serverListener.ts";
-import {BaseComponent} from "../../components/baseComponent.ts";
-import {baseOptions} from "../../components/dataTypes/baseOptions.ts";
-import {Button} from "../../components/buttonComponent.ts";
-import {carSvg} from "../../media/carSvg.ts";
-import {flagSvg} from "../../media/flagSvg.ts";
-import {Observer, Subject} from "../../components/dataTypes/observer.ts";
-import {Engine} from "../../serverDetails/engine.ts";
+import {CarType} from "../serverDetails/garageServer.ts";
+import {ServerListener} from "../serverDetails/serverListener.ts";
+import {BaseComponent} from "../components/baseComponent.ts";
+import {baseOptions} from "../components/dataTypes/baseOptions.ts";
+import {Button} from "../components/buttonComponent.ts";
+import {carSvg} from "../media/carSvg.ts";
+import {flagSvg} from "../media/flagSvg.ts";
+import {Observer} from "../components/dataTypes/observer.ts";
+import {Engine, EngineStatus} from "../serverDetails/engine.ts";
 
 export class Car extends BaseComponent implements Observer {
     private road: BaseComponent// = new BaseComponent({tag: 'div'});
@@ -40,16 +40,14 @@ export class Car extends BaseComponent implements Observer {
         this.init();
     }
 
-    startEngine ()  {
-        this.engine.startEngine().then((result) => {
+    startEngine()  {
+        return this.engine.startEngine().then(() => {
             this.drive();
-            this.engine.startDrive();
-
-            return result;
+            return this.engine.startDrive();
         });
     }
 
-    resetCar  ()  {
+    resetCar ()  {
         this.engine.stopEngine();
         const carSvg = this.svg.getNode();
         carSvg.style.transform = `translateX(0px)`;
@@ -90,11 +88,10 @@ export class Car extends BaseComponent implements Observer {
 
     drive() {
         const car = this.svg.getNode();
-        const stepSize = this.engine.getVelocity();
+        const stepSize = this.engine.getVelocity()*0.2;
         const carObj    = this;
         let road = window.innerWidth - 150;
         let start: number;
-        console.log(stepSize);
 
         function step(timestamp: number) {
             if (start === undefined) {
@@ -109,7 +106,7 @@ export class Car extends BaseComponent implements Observer {
                 return;
             }
 
-            if (shift < +road && carObj.engine.getStatus() !== "stopped") {
+            if (shift < +road && carObj.engine.getStatus() !== EngineStatus.STOP) {
                 car.style.transform = `translateX(${shift}px)`;
                 //console.log(shift)
                 //ServerListener.engine.drive(carId.toString());

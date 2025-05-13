@@ -12,11 +12,11 @@ export class MainComponent extends BaseComponent{
         let blockAppend: BaseComponent | null = null;
 
         ServerListener.garage.detachAll();
-        ServerListener.winners.detachAll();
+        //ServerListener.winners.detachAll();
 
         switch (ServerListener.garage.state.designPage) {
             case "Winners":
-                ServerListener.winners.detachAll();
+                //ServerListener.winners.detachAll();
                 blockAppend = new Winners({tag: "table"});  
                 break;
             case "Garage":

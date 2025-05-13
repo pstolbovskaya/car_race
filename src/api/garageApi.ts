@@ -1,3 +1,5 @@
+import {CarType} from "../serverDetails/garageServer.ts";
+
 export const createCar = async (name: string, color: string) =>
     await fetch('http://localhost:3000/garage', {
         method: 'POST',
@@ -8,7 +10,6 @@ export const createCar = async (name: string, color: string) =>
             name: name.toLowerCase(), color: color.toLowerCase(),
         }),
     });
-
 
 export const updateCar = async (id: number, name: string, color: string) => {
     const params = new URLSearchParams();
@@ -25,7 +26,7 @@ export const updateCar = async (id: number, name: string, color: string) => {
         }),
     });
 }
-export const getCar = async (id: number) => {
+export const getCar = async (id: number): Promise<CarType> => {
     const params = new URLSearchParams();
 
     params.append("id", id.toString());

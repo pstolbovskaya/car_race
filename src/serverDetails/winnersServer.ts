@@ -1,14 +1,4 @@
-import { Subject } from "../components/dataTypes/observer.ts";
-import { Observer } from "../components/dataTypes/observer.ts";
-
-export type WinnerType = {
-	id: number,  
-    wins: number,
-    time: string,
-}
-
-
-interface State {
+/*interface State {
     winners: Array<WinnerType>,
     page: number,
     limit: number,
@@ -105,4 +95,4 @@ export class WinnersServer implements Subject {
     public detachAll(): void {
         this.observers.splice(0, this.observers.length);
     }
-}
+}*/

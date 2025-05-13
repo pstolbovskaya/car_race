@@ -1,6 +1,6 @@
 import { Subject } from "../components/dataTypes/observer.ts";
 import { Observer } from "../components/dataTypes/observer.ts";
-import {Car} from "../pages/pageElements/car.ts";
+import {Car} from "../pageElements/car.ts";
 
 export class GarageServer implements Subject {
 	

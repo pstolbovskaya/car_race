@@ -22,7 +22,7 @@ export class Engine {
         this.status = EngineStatus.START;
         const res = await switchEngine(this.car.id, this.status);
         this.velocity = res.velocity;
-        this.time = res.time;
+        this.time = res.distance/ this.velocity;
         return res;
     }
 
@@ -33,14 +33,16 @@ export class Engine {
 
     async startDrive() {
         this.status = EngineStatus.DRIVE;
-        return await drive(this.car.id).then((value) => {
-            console.log(value);
-            return this.car.id;
-        })
+        return await drive(this.car.id)
+            .then((value) => {
+                console.log(value);
+                return {id: this.car.id, time: this.time};
+            })
             .catch((err: Error) => {
-            if (err.message === ENGINE_FAILED) {
-                this.status = EngineStatus.STOP;
-            }
-            return err});
+                if (err.message === ENGINE_FAILED) {
+                    this.status = EngineStatus.STOP;
+                }
+                throw err;
+            });
     }
 }
