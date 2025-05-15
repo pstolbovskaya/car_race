@@ -1,3 +1,5 @@
+import {ENGINE_FAILED} from "./engineApi.ts";
+import {ServerListener} from "../serverDetails/serverListener.ts";
 
 export const createWinner = async (id: number, wins: number, time: string) =>
     await fetch('http://localhost:3000/winners/', {
@@ -34,7 +36,15 @@ export const getWinner = async (id: number): Promise<WinnerType> => {
             'content-type': 'application/json;charset=UTF-8',
         },
     });
-    return response.json();
+
+    if (response.status !== 200) {
+        throw new Error(response.statusText);
+    }
+    if (response.status !== 200) {
+        throw new Error(response.statusText);
+    }
+
+    return await response.json();
 }
 
 export type WinnerType = {
@@ -43,8 +53,9 @@ export type WinnerType = {
     time: number,
 }
 
-export const getWinners = async (page: number, limit: number, sort: 'id' | 'wins' | 'time' = 'id', order: 'ASC' | 'DESC' = 'ASC') => {
+export const getWinners = async (page: number, limit: number, sort: 'id' | 'wins' | 'time', order: 'ASC' | 'DESC') => {
     const params = new URLSearchParams();
+
     params.append("_page", page.toString());
     params.append("_limit", limit.toString());
     params.append("_sort", sort.toString());
@@ -55,13 +66,24 @@ export const getWinners = async (page: number, limit: number, sort: 'id' | 'wins
             'content-type': 'application/json;charset=UTF-8',
         },
     });
-    return await result.json() as Array<WinnerType>;
+    console.log(sort, order)
+    if (result.status !== 200) {
+        throw new Error(result.statusText);
+    }
+    const winners = await result.json();
+
+    ServerListener.winners.winPage.winners = winners;
+    ServerListener.winners.winPage.page = page;
+    ServerListener.winners.winPage.limit = limit;
+    ServerListener.winners.notify();
+
+    return winners;
 }
 
 export const deleteWinner = async (id: number) => {
     const params = new URLSearchParams();
     params.append("id", id.toString());
-    return await fetch(`http://localhost:3000//winners/${id}`, {
+    return await fetch(`http://localhost:3000/winners/${id}`, {
         method: 'DELETE',
     })
 }

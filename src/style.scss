@@ -9,7 +9,22 @@
     transform: scale(3) translate(-20px, 9px);
 }
 
-footer {
+.paginator {
     justify-self: center;
     position: sticky;
 }
+
+table {
+    justify-self: center;
+}
+
+tr {
+    text-align: center;
+}
+
+.sorting-button {
+    border: none;
+    background: none;
+    height: 100%;
+}
+

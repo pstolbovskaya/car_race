@@ -35,7 +35,6 @@ export class Engine {
         this.status = EngineStatus.DRIVE;
         return await drive(this.car.id)
             .then((value) => {
-                console.log(value);
                 return {id: this.car.id, time: this.time};
             })
             .catch((err: Error) => {

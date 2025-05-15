@@ -7,6 +7,7 @@ import {carSvg} from "../media/carSvg.ts";
 import {flagSvg} from "../media/flagSvg.ts";
 import {Observer} from "../components/dataTypes/observer.ts";
 import {Engine, EngineStatus} from "../serverDetails/engine.ts";
+import {deleteCar, getCar} from "../api/garageApi.ts";
 
 export class Car extends BaseComponent implements Observer {
     private road: BaseComponent// = new BaseComponent({tag: 'div'});
@@ -27,11 +28,14 @@ export class Car extends BaseComponent implements Observer {
 
         this.selectBtn = new Button("Select", () => {
             ServerListener.garage.state.selectedCar = car;
-            ServerListener.garage.getCar();
+            ServerListener.garage.notify();
         });
 
-        this.deleteBtn = new Button("Delete", () =>
-            ServerListener.garage.deleteCar());
+        this.deleteBtn = new Button("Delete", async () => {
+            await deleteCar(car.id);
+            ServerListener.garage.notify();
+        });
+
 
         this.engineStartBtn = new Button("A", () => this.startEngine());
         this.engineStopBtn = new Button("B", () => this.resetCar());
@@ -51,6 +55,8 @@ export class Car extends BaseComponent implements Observer {
         this.engine.stopEngine();
         const carSvg = this.svg.getNode();
         carSvg.style.transform = `translateX(0px)`;
+        this.engineStartBtn.removeAttribute("disabled");
+        this.engineStopBtn.setAttribute("disabled", "");
     }
 
     init() {
@@ -88,9 +94,11 @@ export class Car extends BaseComponent implements Observer {
 
     drive() {
         const car = this.svg.getNode();
-        const stepSize = this.engine.getVelocity()*0.2;
+        const stepSize = this.engine.getVelocity();
         const carObj    = this;
-        let road = window.innerWidth - 150;
+        const road = window.innerWidth - 150;
+        const animationTime = 1000*road/stepSize;
+
         let start: number;
 
         function step(timestamp: number) {
@@ -99,25 +107,24 @@ export class Car extends BaseComponent implements Observer {
             }
 
             const elapsed = timestamp - start;
-            const shift = Math.min(0.01 * stepSize * elapsed, +road);
+            const progress = Math.min(elapsed / animationTime, 1);
+            const shift =  road * progress;
 
-            if (shift >= +road) {
-                carObj.engine.stopEngine();
-                return;
-            }
-
-            if (shift < +road && carObj.engine.getStatus() !== EngineStatus.STOP) {
+            if (progress < 1 && carObj.engine.getStatus() !== EngineStatus.STOP) {
                 car.style.transform = `translateX(${shift}px)`;
-                //console.log(shift)
-                //ServerListener.engine.drive(carId.toString());
                 requestAnimationFrame(step);
+            } else {
+                carObj.engine.stopEngine();
+
             }
 
         }
 
         requestAnimationFrame(step);
 
-        this.engineStopBtn.setAttribute("disabled", '');
-        this.engineStartBtn.removeAttribute("disabled");
+        if (carObj.engine.getStatus() !== EngineStatus.STOP) {
+            this.engineStopBtn.removeAttribute("disabled");
+            this.engineStartBtn.setAttribute("disabled", '');
+        }
     }
 }
