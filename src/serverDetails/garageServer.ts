@@ -1,5 +1,6 @@
 import { Subject } from "../components/dataTypes/observer.ts";
 import { Observer } from "../components/dataTypes/observer.ts";
+import {createCar} from "../api/garageApi.ts";
 
 export class GarageServer implements Subject {
 	
@@ -49,7 +50,7 @@ export class GarageServer implements Subject {
 			const color = "#" + Math.floor(Math.random()*16777215).toString(16);
 			const name = cars[Math.floor(Math.random() * cars.length)];
 
-			this.createCar(name, color);
+			createCar(name, color);
 		}
 	}
 }

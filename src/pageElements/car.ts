@@ -5,15 +5,14 @@ import {baseOptions} from "../components/dataTypes/baseOptions.ts";
 import {Button} from "../components/buttonComponent.ts";
 import {carSvg} from "../media/carSvg.ts";
 import {flagSvg} from "../media/flagSvg.ts";
-import {Observer} from "../components/dataTypes/observer.ts";
 import {Engine, EngineStatus} from "../serverDetails/engine.ts";
-import {deleteCar, getCar} from "../api/garageApi.ts";
+import {deleteCar} from "../api/garageApi.ts";
 
-export class Car extends BaseComponent implements Observer {
-    private road: BaseComponent// = new BaseComponent({tag: 'div'});
-    private title: BaseComponent// = new BaseComponent({tag: 'p'});
-    private svg: BaseComponent// = new BaseComponent({tag: 'div'});
-    private finish: BaseComponent// = new BaseComponent({tag: 'div'});
+export class Car extends BaseComponent {
+    private road: BaseComponent = new BaseComponent({tag: 'div'});
+    private title: BaseComponent = new BaseComponent({tag: 'p'});
+    private svg: BaseComponent = new BaseComponent({tag: 'div'});
+    private finish: BaseComponent = new BaseComponent({tag: 'div'});
     private selectBtn: Button;
     private deleteBtn: Button;
     private engineStartBtn: Button;
@@ -68,11 +67,6 @@ export class Car extends BaseComponent implements Observer {
     }
 
     build() {
-        this.road = new BaseComponent({tag: 'div'});
-        this.title = new BaseComponent({tag: 'p'});
-        this.svg = new BaseComponent({tag: 'div'});
-        this.finish = new BaseComponent({tag: 'div'});
-
         this.svg.setHTML(carSvg(this.car.color));
         this.road.appendChildren([this.svg, this.finish]);
         this.road.toggleClass("road")

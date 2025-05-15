@@ -2,7 +2,7 @@ import { baseOptions } from "./dataTypes/baseOptions.ts";
 
 export class BaseComponent {
     protected children: Array<BaseComponent> = [];
-    protected node: HTMLElement | undefined;
+    protected node: HTMLElement;
 
     constructor(component: baseOptions, ...children : Array<BaseComponent>) {
         const node = document.createElement(component.tag);
@@ -69,7 +69,6 @@ export class BaseComponent {
     
     destroy() {
         this.destroyChildren();
-        this.node!.remove();
-        this.node = undefined;
+        this.node.remove();
     }
 }

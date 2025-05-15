@@ -1,4 +1,3 @@
-import {ServerListener} from "../serverDetails/serverListener.ts";
 import {CarType} from "../serverDetails/garageServer.ts";
 
 export const createCar = async (name: string, color: string) =>

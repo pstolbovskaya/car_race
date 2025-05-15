@@ -7,7 +7,7 @@ import { ServerListener } from "../serverDetails/serverListener";
 import {DataContainer} from "../components/dataContainer.ts";
 import {Button} from "../components/buttonComponent.ts";
 import {createWinner, getWinner, updateWinner} from "../api/winnersApi.ts";
-import {createCar, getCar, getCars, updateCar} from "../api/garageApi.ts";
+import {createCar, getCars, updateCar} from "../api/garageApi.ts";
 
 export class Garage extends BaseComponent implements Observer {
 
