@@ -1,5 +1,7 @@
 import {CarType} from "../serverDetails/garageServer.ts";
 
+export let carsAmount: string | null = null;
+
 export const createCar = async (name: string, color: string) =>
     await fetch('http://localhost:3000/garage', {
         method: 'POST',
@@ -10,12 +12,9 @@ export const createCar = async (name: string, color: string) =>
             name: name.toLowerCase(), color: color.toLowerCase(),
         }),
     });
-export const updateCar = async (id: number, name: string, color: string) => {
-    const params = new URLSearchParams();
 
-    params.append("id", id.toString());
-
-    return await fetch(`http://localhost:3000/garage/${params}`, {
+export const updateCar = async (id: number, name: string, color: string) =>
+    await fetch(`http://localhost:3000/garage/${id}`, {
         method: 'PUT',
         headers: {
             'content-type': 'application/json;charset=UTF-8',
@@ -24,11 +23,8 @@ export const updateCar = async (id: number, name: string, color: string) => {
             name: name.toLowerCase(), color: color.toLowerCase(),
         }),
     });
-}
-export const getCar = async (id: number): Promise<CarType> => {
-    const params = new URLSearchParams();
 
-    params.append("id", id.toString());
+export const getCar = async (id: number): Promise<CarType> => {
     const response = await fetch(`http://localhost:3000/garage/${id}`, {
         method: 'GET',
     });
@@ -39,7 +35,8 @@ export const getCar = async (id: number): Promise<CarType> => {
 
     return response.json();
 }
-export const getCars = async (page: number, limit: number):Promise<Array<CarType>> => {
+
+export const getCars = async (page: number, limit: number): Promise<Array<CarType>> => {
     const params = new URLSearchParams();
 
     params.append("_page", page.toString());
@@ -56,13 +53,12 @@ export const getCars = async (page: number, limit: number):Promise<Array<CarType
         throw new Error(response.statusText);
     }
 
+    carsAmount = response.headers.get("X-Total-Count");
+
     return response.json();
 }
-export const deleteCar = async (id: number) => {
-    const params = new URLSearchParams();
 
-    params.append("id", id.toString());
-    return await fetch(`http://localhost:3000/garage/${id}`, {
+export const deleteCar = async (id: number) =>
+    await fetch(`http://localhost:3000/garage/${id}`, {
         method: 'DELETE',
     })
-}

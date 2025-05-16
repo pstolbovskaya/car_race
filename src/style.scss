@@ -14,6 +14,9 @@
     position: sticky;
 }
 
+.title {
+    text-transform: capitalize;
+}
 table {
     justify-self: center;
 }
@@ -22,9 +25,43 @@ tr {
     text-align: center;
 }
 
-.sorting-button {
+.table-header-button {
     border: none;
     background: none;
-    height: 100%;
+    font-weight: bold;
 }
 
+/* формируем фон для модального окна */
+.modal {
+    display: none; /* скрыт по умолчанию */
+    /* темный фон при открытии модалки должен быть на всю страницу */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1; /* поверх всех элементов */
+    background-color: rgba(0,0,0,0.4); /* цвет фона - прозрачный черный */
+
+    &_visible {
+        display: flex;
+        position: fixed;
+        align-items: center;
+        justify-content: center;
+        align-content: center;
+    }
+
+    &__container {
+        height: min-content;
+        display: flex;
+        align-content: space-between;
+    }
+    &__content {
+        background-color: #fff;
+        font-size: 20px;
+    }
+
+    &__close {
+        top: 1px;
+    }
+}

@@ -1,4 +1,4 @@
-export  const ENGINE_FAILED = "Engine failed";
+export const ENGINE_FAILED = "Engine failed";
 export const switchEngine = async (id: number, status: "started" | "stopped") => {
     const params = new URLSearchParams();
 
@@ -13,7 +13,7 @@ export const switchEngine = async (id: number, status: "started" | "stopped") =>
     })
     return response.json();
 }
-export const drive = async (idParam: number)  => {
+export const drive = async (idParam: number) => {
 
     const params = new URLSearchParams();
     params.append("id", idParam.toString());

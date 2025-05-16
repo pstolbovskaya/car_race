@@ -1,5 +1,4 @@
-import {ENGINE_FAILED} from "./engineApi.ts";
-import {ServerListener} from "../serverDetails/serverListener.ts";
+export let totalWinners: string | null = null;
 
 export const createWinner = async (id: number, wins: number, time: string) =>
     await fetch('http://localhost:3000/winners/', {
@@ -24,10 +23,11 @@ export const updateWinner = async (id: number, wins: number, time: string) => {
             wins: wins, time: time,
         }),
     })
-}
 
+}
 export const getWinner = async (id: number): Promise<WinnerType> => {
     const params = new URLSearchParams();
+
     params.append("id", `${id}`);
 
     const response = await fetch(`http://localhost:3000/winners/${id}`, {
@@ -36,17 +36,12 @@ export const getWinner = async (id: number): Promise<WinnerType> => {
             'content-type': 'application/json;charset=UTF-8',
         },
     });
-
     if (response.status !== 200) {
         throw new Error(response.statusText);
-    }
-    if (response.status !== 200) {
-        throw new Error(response.statusText);
-    }
 
+    }
     return await response.json();
 }
-
 export type WinnerType = {
     id: number,
     wins: number,
@@ -66,16 +61,11 @@ export const getWinners = async (page: number, limit: number, sort: 'id' | 'wins
             'content-type': 'application/json;charset=UTF-8',
         },
     });
-    console.log(sort, order)
     if (result.status !== 200) {
         throw new Error(result.statusText);
     }
+    totalWinners = result.headers.get('X-Total-Count');
     const winners = await result.json();
-
-    ServerListener.winners.winPage.winners = winners;
-    ServerListener.winners.winPage.page = page;
-    ServerListener.winners.winPage.limit = limit;
-    ServerListener.winners.notify();
 
     return winners;
 }

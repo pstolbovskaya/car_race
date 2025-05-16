@@ -2,7 +2,7 @@ import {HeaderComponent} from "./components/headerComponent";
 import {MainComponent} from "./components/mainComponent"
 
 export class Main {
-    private header : HeaderComponent | null = null;
+    private header: HeaderComponent | null = null;
     private main: MainComponent | null = null;
 
     constructor() {
@@ -19,7 +19,7 @@ export class Main {
         });
 
         this.header = new HeaderComponent();
-        this.main  = new MainComponent();
+        this.main = new MainComponent();
 
         document.body.append(this.header.getNode());
         document.body.append(this.main.getNode());

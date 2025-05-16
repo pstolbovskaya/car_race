@@ -26,4 +26,9 @@ export class DataContainer extends BaseComponent {
     init() {
         this.color.setAttribute("type", "color");
     }
+
+    setControls(name: string, color: string) {
+        this.input.setValue(name);
+        this.color.setValue(color);
+    }
 }

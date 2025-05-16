@@ -43,14 +43,14 @@ export class Car extends BaseComponent {
         this.init();
     }
 
-    startEngine()  {
+    startEngine() {
         return this.engine.startEngine().then(() => {
             this.drive();
             return this.engine.startDrive();
         });
     }
 
-    resetCar ()  {
+    resetCar() {
         this.engine.stopEngine();
         const carSvg = this.svg.getNode();
         carSvg.style.transform = `translateX(0px)`;
@@ -71,6 +71,7 @@ export class Car extends BaseComponent {
         this.road.appendChildren([this.svg, this.finish]);
         this.road.toggleClass("road")
         this.title.setTextContent(this.car.name);
+        this.title.toggleClass("title");
         const selection = new BaseComponent({tag: "div"});
         const engine = new BaseComponent({tag: "div"});
         selection.appendChildren([this.selectBtn, this.deleteBtn]);
@@ -89,9 +90,9 @@ export class Car extends BaseComponent {
     drive() {
         const car = this.svg.getNode();
         const stepSize = this.engine.getVelocity();
-        const carObj    = this;
+        const carObj = this;
         const road = window.innerWidth - 150;
-        const animationTime = 1000*road/stepSize;
+        const animationTime = 1000 * road / stepSize;
 
         let start: number;
 
@@ -102,7 +103,7 @@ export class Car extends BaseComponent {
 
             const elapsed = timestamp - start;
             const progress = Math.min(elapsed / animationTime, 1);
-            const shift =  road * progress;
+            const shift = road * progress;
 
             if (progress < 1 && carObj.engine.getStatus() !== EngineStatus.STOP) {
                 car.style.transform = `translateX(${shift}px)`;
