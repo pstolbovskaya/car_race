@@ -6,9 +6,6 @@ export class Main {
     private main: MainComponent | null = null;
 
     constructor() {
-        this.header = null;
-        this.main = null;
-
         this.build();
     }
 

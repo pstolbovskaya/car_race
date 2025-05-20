@@ -1,5 +1,3 @@
-export let totalWinners: string | null = null;
-
 export const createWinner = async (id: number, wins: number, time: string) =>
     await fetch('http://localhost:3000/winners/', {
         method: 'POST',
@@ -48,7 +46,7 @@ export type WinnerType = {
     time: number,
 }
 
-export const getWinners = async (page: number, limit: number, sort: 'id' | 'wins' | 'time', order: 'ASC' | 'DESC') => {
+export const getWinners = async (page: number, limit: number, sort: 'id' | 'wins' | 'time', order: 'ASC' | 'DESC'):Promise<{totalWinners: number | null, winners: Array<WinnerType>}> => {
     const params = new URLSearchParams();
 
     params.append("_page", page.toString());
@@ -64,10 +62,10 @@ export const getWinners = async (page: number, limit: number, sort: 'id' | 'wins
     if (result.status !== 200) {
         throw new Error(result.statusText);
     }
-    totalWinners = result.headers.get('X-Total-Count');
-    const winners = await result.json();
 
-    return winners;
+    const totalWinners = result.headers.get('X-Total-Count');
+
+    return  {totalWinners: Number(totalWinners ?? 0), winners: await result.json()};
 }
 
 export const deleteWinner = async (id: number) => {

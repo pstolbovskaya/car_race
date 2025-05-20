@@ -110,9 +110,7 @@ export class Car extends BaseComponent {
                 requestAnimationFrame(step);
             } else {
                 carObj.engine.stopEngine();
-
             }
-
         }
 
         requestAnimationFrame(step);

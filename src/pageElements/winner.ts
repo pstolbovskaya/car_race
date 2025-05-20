@@ -10,7 +10,7 @@ export class Winner extends BaseComponent implements Observer {
     private carName = new BaseComponent({tag: "td", className: "title"});
     private wins = new BaseComponent({tag: "td"});
     private time = new BaseComponent({tag: "td"});
-    private car: CarType;
+    private car: CarType | undefined = undefined;
 
     constructor(options: baseOptions, id: number, private winner: WinnerType) {
         super(options);
@@ -38,7 +38,7 @@ export class Winner extends BaseComponent implements Observer {
         this.appendChildren([this.winnerId, this.carName, this.wins, this.time]);
     }
 
-    update(subject: Subject): void {
+    update(_subject: Subject): void {
         this.build();
     }
 }

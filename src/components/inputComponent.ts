@@ -2,7 +2,7 @@ import {BaseComponent} from "./baseComponent";
 import {baseOptions} from "./dataTypes/baseOptions.ts";
 
 export class Input extends BaseComponent {
-    constructor(className: string, clbck?: (this: GlobalEventHandlers, ev: MouseEvent) => any) {
+    constructor(className: string, clbck?: (this: GlobalEventHandlers, ev: Event) => any) {
 
         const options: baseOptions = {
             tag: "input",
@@ -12,7 +12,7 @@ export class Input extends BaseComponent {
         super(options)
 
         if (clbck) {
-            this.onClick(clbck);
+            this.onInput(clbck);
         }
     }
 
@@ -24,8 +24,8 @@ export class Input extends BaseComponent {
         (this.getNode() as HTMLInputElement).value = value;
     }
 
-    onClick(action: (this: GlobalEventHandlers, ev: MouseEvent) => any) {
-        this.node.onclick = action;
+    onInput(action: (this: GlobalEventHandlers, ev: Event) => any) {
+        this.node.oninput = action;
     }
 
 }

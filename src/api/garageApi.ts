@@ -1,7 +1,5 @@
 import {CarType} from "../serverDetails/garageServer.ts";
 
-export let carsAmount: string | null = null;
-
 export const createCar = async (name: string, color: string) =>
     await fetch('http://localhost:3000/garage', {
         method: 'POST',
@@ -36,7 +34,7 @@ export const getCar = async (id: number): Promise<CarType> => {
     return response.json();
 }
 
-export const getCars = async (page: number, limit: number): Promise<Array<CarType>> => {
+export const getCars = async (page: number, limit: number): Promise<{carsAmount: number | null, cars: Array<CarType>}> => {
     const params = new URLSearchParams();
 
     params.append("_page", page.toString());
@@ -53,9 +51,9 @@ export const getCars = async (page: number, limit: number): Promise<Array<CarTyp
         throw new Error(response.statusText);
     }
 
-    carsAmount = response.headers.get("X-Total-Count");
+    const carsAmount = response.headers.get("X-Total-Count");
 
-    return response.json();
+    return {carsAmount: Number(carsAmount ?? 0), cars: await response.json()};
 }
 
 export const deleteCar = async (id: number) =>

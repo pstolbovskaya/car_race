@@ -1,12 +1,11 @@
 import {BaseComponent} from "../components/baseComponent.ts";
 import {baseOptions} from "../components/dataTypes/baseOptions.ts";
-import {Observer, Subject} from "../components/dataTypes/observer.ts";
+import {Observer} from "../components/dataTypes/observer.ts";
 import {Winner} from "../pageElements/winner.ts";
-import {deleteWinner, getWinners, totalWinners, WinnerType} from "../api/winnersApi.ts";
+import {deleteWinner, getWinners, WinnerType} from "../api/winnersApi.ts";
 import {getCar} from "../api/garageApi.ts";
 import {Button} from "../components/buttonComponent.ts";
-
-const Disabled = "disabled";
+import {Paginator} from "../pageElements/paginator.ts";
 
 const enum SortingField {
     ID = "id",
@@ -27,11 +26,9 @@ export class Winners extends BaseComponent implements Observer {
     private sortingField: SortingField = SortingField.ID;
     private sortingOption: SortingType = SortingType.ASC;
     private totalWinners: number = 0;
-    private prevPage = new Button("<", () => this.onPageChange(-1));
-    private nextPage = new Button(">", () => this.onPageChange(1));
     private limit = 10;
     private totalPages = 0;
-    private curPageElement = new BaseComponent({tag: "span"});
+    private paginator : Paginator | undefined = undefined;
 
     constructor(options: baseOptions) {
         super(options);
@@ -49,28 +46,37 @@ export class Winners extends BaseComponent implements Observer {
         }
     }
 
-    update(subject: Subject): void {
+    update(): void {
         this.getWinners();
     }
 
-    async getWinners(): void {
-        this.winners = await getWinners(this.currentPage, this.limit, this.sortingField, this.sortingOption);
+    async getWinners() {
+        const {totalWinners, winners} = await getWinners(this.currentPage, this.limit, this.sortingField, this.sortingOption);
+
+        this.winners = winners;
 
         if (totalWinners) {
             this.totalWinners = +totalWinners;
             this.totalPages = Math.ceil(this.totalWinners / this.limit);
         }
+
         this.title.setTextContent(`Winners(${this.totalWinners})`);
         this.updWinnersData();
-        this.updateButtonVisibility();
+        this.paginator?.updatePaginator(this.totalPages);
     }
 
     run() {
+        this.paginator = new Paginator(this.onPageChange.bind(this));
         this.append(this.title);
         this.append(this.winnersContainer);
-        this.append(this.paginator());
+        this.append(this.paginator);
     }
 
+
+    onPageChange(page: number) {
+        this.currentPage = page;
+        this.update()
+    }
 
     updWinnersData() {
         this.winnersContainer.destroyChildren();
@@ -125,44 +131,9 @@ export class Winners extends BaseComponent implements Observer {
                     this.winnersContainer.append(winner)
                     return car;
                 })
-                .catch((err) => {
+                .catch((_err) => {
                     deleteWinner(element.id);
                 })
         });
-    }
-
-    paginator() {
-
-        const paginator = new BaseComponent({tag: "div", className: "paginator"});
-        this.curPageElement.setTextContent(this.currentPage.toString());
-
-        paginator.appendChildren([this.prevPage, this.curPageElement, this.nextPage]);
-
-        this.prevPage.setAttribute(Disabled, "");
-
-        if (this.currentPage === Math.ceil(this.totalWinners / this.limit)) {
-            this.nextPage.setAttribute(Disabled, "");
-        }
-
-        return paginator;
-    }
-
-    onPageChange(n: number) {
-        this.currentPage += n;
-        this.getWinners();
-    }
-
-    updateButtonVisibility() {
-        this.prevPage.removeAttribute(Disabled);
-        this.nextPage.removeAttribute(Disabled);
-
-        this.curPageElement.setTextContent(this.currentPage.toString());
-
-        if (this.currentPage === 1) {
-            this.prevPage.setAttribute(Disabled, "");
-        }
-        if (this.currentPage === this.totalPages) {
-            this.nextPage.setAttribute(Disabled, "");
-        }
     }
 }

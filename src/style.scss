@@ -31,17 +31,15 @@ tr {
     font-weight: bold;
 }
 
-/* формируем фон для модального окна */
 .modal {
-    display: none; /* скрыт по умолчанию */
-    /* темный фон при открытии модалки должен быть на всю страницу */
+    display: none;
     position: absolute;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: 1; /* поверх всех элементов */
-    background-color: rgba(0,0,0,0.4); /* цвет фона - прозрачный черный */
+    z-index: 1;
+    background-color: rgba(0,0,0,0.4);
 
     &_visible {
         display: flex;

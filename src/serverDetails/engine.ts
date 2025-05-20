@@ -1,7 +1,8 @@
 import {switchEngine, drive, ENGINE_FAILED} from "../api/engineApi.ts";
 import {CarType} from "./garageServer.ts";
 
-export const enum EngineStatus {
+
+export const enum EngineStatus{
     START = "started",
     STOP = "stopped",
     DRIVE = "drive",
@@ -16,9 +17,13 @@ export class Engine {
         this.car = car;
     }
 
-    getStatus = () => this.status;
-    getVelocity = () => this.velocity;
-    getTime = () => this.time;
+    getStatus() {
+        return this.status;
+    }
+
+    getVelocity() {
+        return this.velocity;
+    }
 
     async startEngine() {
         this.status = EngineStatus.START;
