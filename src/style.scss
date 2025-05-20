@@ -1,0 +1,65 @@
+.road {
+    border-bottom: 2px dashed #000000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.flag {
+    transform: scale(3) translate(-20px, 9px);
+}
+
+.paginator {
+    justify-self: center;
+    position: sticky;
+}
+
+.title {
+    text-transform: capitalize;
+}
+table {
+    justify-self: center;
+}
+
+tr {
+    text-align: center;
+}
+
+.table-header-button {
+    border: none;
+    background: none;
+    font-weight: bold;
+}
+
+.modal {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+    background-color: rgba(0,0,0,0.4);
+
+    &_visible {
+        display: flex;
+        position: fixed;
+        align-items: center;
+        justify-content: center;
+        align-content: center;
+    }
+
+    &__container {
+        height: min-content;
+        display: flex;
+        align-content: space-between;
+    }
+    &__content {
+        background-color: #fff;
+        font-size: 20px;
+    }
+
+    &__close {
+        top: 1px;
+    }
+}
